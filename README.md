@@ -221,7 +221,7 @@ Each experiment (system, model, data combination) in this project corresponds to
 
 If you've changed the dataset, you'll need to ensure the Elasticsearch index of that name is available (see processing-notes and setting-up-retriever for it).
 
-If you've changed the model, you'll need to ensure model of that name is implemented and available in the code. If you want to try out a different OpenAI completion model, it'd just involve configuring the `engine` variable and setting the `model_tokens_limit` in here. Chat-based API isn't readily supported yet, but shouldn't be much work if you're interested. If you're interested in open LLMs, like Llama, MPT, etc, you can set up OpenAI-complaint FastChat server as shown [here](https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md), and made necessary changes in the base_config/ and you should be good to go.
+If you've changed the model, you'll need to ensure model of that name is implemented and available in the code. If you want to try out a different OpenAI completion model, it'd just involve configuring the `engine` variable and setting the `model_tokens_limit` in [here](https://github.com/StonyBrookNLP/ircot/blob/main/commaqa/models/gpt3generator.py). Chat-based API isn't readily supported yet, but shouldn't be much work if you're interested. If you're interested in open LLMs, like Llama, MPT, etc, you can set up OpenAI-complaint FastChat server as shown [here](https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md), and made necessary changes in the base_config/ and you should be good to go.
 
 If you're stuck anywhere in this process, open an issue with your specific choice of data/model, and I can help you to get there.
 
