@@ -236,7 +236,7 @@ if __name__ == "__main__":
     elasticsearch_index = args.dataset_name
     es = Elasticsearch(
         [{"host": elastic_host, "port": elastic_port}],
-        max_retries=2, # it's exp backoff starting 2, more than 2 retries will be too much.
+        max_retries=2,  # it's exp backoff starting 2, more than 2 retries will be too much.
         timeout=500,
         retry_on_timeout=True,
     )
@@ -294,9 +294,9 @@ if __name__ == "__main__":
     result = bulk(
         es,
         make_documents(elasticsearch_index),
-        raise_on_error=True, # set to true o/w it'll fail silently and only show less docs.
-        raise_on_exception=True, # set to true o/w it'll fail silently and only show less docs.
-        max_retries=2, # it's exp backoff starting 2, more than 2 retries will be too much.
+        raise_on_error=True,  # set to true o/w it'll fail silently and only show less docs.
+        raise_on_exception=True,  # set to true o/w it'll fail silently and only show less docs.
+        max_retries=2,  # it's exp backoff starting 2, more than 2 retries will be too much.
         request_timeout=500,
     )
     es.indices.refresh(elasticsearch_index)  # actually updates the count.

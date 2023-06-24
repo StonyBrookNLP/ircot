@@ -13,7 +13,12 @@ def get_qa_prompt_generator_args_and_names(dataset_name: str) -> List[Dict]:
 
         for qa_type in ("direct", "cot"):
             for context_type in ("no", "gold_with_distractors"):
-                for distractor_count in (1, 2, 3):
+                distractor_counts = (0,) if context_type == "no" else (1, 2, 3)
+                for distractor_count in distractor_counts:
+
+                    if distractor_count == 0:
+                        assert context_type == "no"
+
                     prompt_generator_args = {
                         "qa_type": qa_type,
                         "context_type": context_type,
@@ -24,6 +29,8 @@ def get_qa_prompt_generator_args_and_names(dataset_name: str) -> List[Dict]:
                         prompt_generator_args["pinned_at_bottom"] = model_name == "flan_t5"
 
                     context_type_ = f"gold_with_{distractor_count}_distractors"
+                    if not distractor_count:
+                        context_type_ = "gold"
 
                     prompt_name = f"{context_type_}_context_{qa_type}_qa_{model_name}.txt"
                     prompt_generator_args_and_names.append(
@@ -60,7 +67,6 @@ def main():
     parser.add_argument(
         "dataset_name", type=str, help="dataset_name", choices={"hotpotqa", "2wikimultihopqa", "musique", "iirc"}
     )
-    parser.add_argument("--task_name", type=str, help="task_name", choices={"qa", "no_context_open_retrieval"})
     args = parser.parse_args()
 
     input_file_path = os.path.join("processed_data", args.dataset_name, "annotated_only_train.jsonl")

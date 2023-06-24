@@ -115,7 +115,7 @@ class QAPromptGenerator(PromptGenerator):
         assert isinstance(distractor_count, int) or isinstance(distractor_count, tuple)
         self._distractor_count = distractor_count
         self._max_paragraph_tokens = max_paragraph_tokens
-        assert model_name in ("codex", "flan"), f"model_name must be in codex, flan. Found {model_name}."
+        assert model_name in ("codex", "flan_t5"), f"model_name must be in codex, flan_t5. Found {model_name}."
         self._model_name = model_name
         assert pinned_at_bottom in (True, False), "pinned_at_bottom must be True or False."
         self._pinned_at_bottom = pinned_at_bottom
@@ -240,7 +240,7 @@ class NoContextOpenRetrieverPromptGenerator(PromptGenerator):
         one_demonstration_per_instance: bool = False,
     ):
         super().__init__(input_file_path, demonstration_delimiter, one_demonstration_per_instance)
-        assert model_name in ("codex", "flan"), f"model_name must be in codex, flan. Found {model_name}."
+        assert model_name in ("codex", "flan_t5"), f"model_name must be in codex, flan_t5. Found {model_name}."
         self._model_name = model_name
 
     def _generate(self, instance: Dict) -> List[Dict]:
