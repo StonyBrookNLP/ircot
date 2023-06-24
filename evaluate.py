@@ -112,6 +112,8 @@ def official_evaluate_by_dicts(
             id_to_predictions[id_] = " ".join([str(e) for e in prediction])
             print("WARNING: Found a list answer prediction, concatenating it.")
 
+    os.makedirs(".temp", exist_ok=True)
+
     if dataset == "hotpotqa":
 
         # prepare ground_truth file:
