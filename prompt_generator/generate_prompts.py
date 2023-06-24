@@ -30,7 +30,7 @@ def get_qa_prompt_generator_args_and_names(dataset_name: str) -> List[Dict]:
 
                     context_type_ = f"gold_with_{distractor_count}_distractors"
                     if not distractor_count:
-                        context_type_ = "gold"
+                        context_type_ = "no"
 
                     prompt_name = f"{context_type_}_context_{qa_type}_qa_{model_name}.txt"
                     prompt_generator_args_and_names.append(
