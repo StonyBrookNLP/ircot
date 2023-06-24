@@ -50,12 +50,12 @@ def get_no_context_open_retrieval_prompt_generator_args_and_names(dataset_name: 
 
     prompt_name = "no_context_open_llm_retrieval_codex.txt"
     prompt_generator_args_and_names.append(
-        {"generator_args": {}, "name": prompt_name, "max_paragraph_tokens": max_paragraph_tokens}
+        {"generator_args": {"model_name": "codex"}, "name": prompt_name, "max_paragraph_tokens": max_paragraph_tokens}
     )
 
     prompt_name = "no_context_open_llm_retrieval_flan_t5.txt"
     prompt_generator_args_and_names.append(
-        {"generator_args": {"is_for_flan": True}, "name": prompt_name, "max_paragraph_tokens": max_paragraph_tokens}
+        {"generator_args": {"model_name": "flan_t5"}, "name": prompt_name, "max_paragraph_tokens": max_paragraph_tokens}
     )
 
     return prompt_generator_args_and_names
