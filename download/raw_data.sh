@@ -14,7 +14,7 @@ wget http://curtis.ml.cmu.edu/datasets/hotpot/hotpot_dev_distractor_v1.json -O r
 
 echo "\n\nDownloading raw 2wikimultihopqa data\n"
 mkdir -p raw_data/2wikimultihopqa
-wget https://www.dropbox.com/s/7ep3h8unu2njfxv/data_ids.zip?dl=0&file_subpath=%2Fdata_ids -O .temp/2wikimultihopqa.zip
+wget https://www.dropbox.com/s/7ep3h8unu2njfxv/data_ids.zip?dl=0 -O .temp/2wikimultihopqa.zip
 unzip -jo .temp/2wikimultihopqa.zip -d raw_data/2wikimultihopqa -x "*.DS_Store"
 rm data_ids.zip*
 
