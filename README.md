@@ -66,7 +66,7 @@ python prompt_generator/attach_data_annotations.py iirc
 You'll also need `raw_data` if you want to build elasticsearch indices and run retriever or odqa systems.
 
 ```bash
-./download_raw_data.sh
+./download/raw_data.sh
 ```
 
 The data will be downloaded in `raw_data/{dataset_name}/`.
