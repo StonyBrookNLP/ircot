@@ -124,11 +124,11 @@ cd elasticsearch-7.10.2/
 pkill -f elasticsearch # to stop the server
 ```
 
-Checkout the references sources if you run into problems installing it.
+Check out the reference sources if you run into problems installing it.
 
 </details>
 
-Start the the elasticsearch server on port 9200 (default), and then start the retriever server as show here. You can change the elasticsearch port in `retriever_server/serve.py` if needed.
+Start the elasticsearch server on port 9200 (default), and then start the retriever server as shown here. You can change the elasticsearch port in `retriever_server/serve.py` if needed.
 
 ```bash
 uvicorn serve:app --port 8000 --app-dir retriever_server
@@ -140,7 +140,7 @@ Next, index the wikipedia corpuses for the datasets. Make sure you've downloaded
 python retriever_server/build_index.py {dataset_name} # hotpotqa, iirc, 2wikimultihopqa, musique
 ```
 
-After indexing you can check the number of documents in each index by running `curl localhost:9200/_cat/indices`. You should have 4 indices, one for each dataset, called `{dataset}-wikipedia`. Make sure the match up to the statistics given in the paper. You should expec to see following sizes: HotpotQA (5,233,329), 2WikiMultihopQA (430,225), MuSiQue (139,416), and IIRC (1,882,415).
+After indexing you can check the number of documents in each index by running `curl localhost:9200/_cat/indices`. You should have 4 indices, one for each dataset, called `{dataset}-wikipedia`. Make sure they match up to the statistics given in the paper. You should expect to see the following sizes: HotpotQA (5,233,329), 2WikiMultihopQA (430,225), MuSiQue (139,416), and IIRC (1,882,415).
 
 Next, if you want to use flan-t5-* models, start the llm_server by running:
 
@@ -150,7 +150,7 @@ MODEL_NAME={model_name} uvicorn serve:app --port 8010 --app-dir llm_server # mod
 
 If you want to use openai models (e.g., codex in our experiments), you don't need to start it. In that case, you just need to set the environment variable `OPENAI_API_KEY`.
 
-If you start retriever and/or llm_server on different host or port, update them in `.retriever_address.jsonnet` and `.llm_server_address.jsonnet` before running retrieval/odqa systems.
+If you start retriever and/or llm_server on a different host or port, update them in `.retriever_address.jsonnet` and `.llm_server_address.jsonnet` before running retrieval/odqa systems.
 
 
 # Run Retrieval and ODQA Systems
@@ -213,19 +213,63 @@ python runner.py $SYSTEM $MODEL $DATASET summarize --prompt_set aggregate --best
 ## The mean and std in the final command is what we reported in the paper.
 ```
 
-DISCLAIMER: Please note that our Codex-based experiments were done when it was free. Now it has been deprecated. You can do these experiments with other OpenAI completion modes, or other open/commercial models (see notes below). But keep track of the cost, as it may add up quickly doing these experiments.
+**DISCLAIMER:** Our Codex-based experiments were done when it was free. Now it has been deprecated. You can do these experiments with other OpenAI completion modes, or other open/commercial models (see notes below). But keep track of the cost, as it may add up quickly doing these experiments.
+
+# Download Predictions
+
+If you do not want to run models but just see the predictions/outputs they generated, you can download them by running
+
+```bash
+./download/predictions.sh
+```
+
+This will not only download the final best-HP predictions on the test set but also all HP-tuning predictions on the dev set. They will be stored in `processed_data/{system_name}_{model_name}_{dataset_name}____{prompt_set_id}___{hp_descriptor}/`.
+
+Once done, you can run any of the above given "summary" commands to show a report. Again, the 2 most useful of them are.
+
+```bash
+# to show results for all HPs on dev set. Could help guestimate what HPs for a new model:
+python runner.py $SYSTEM $MODEL $DATASET summarize --prompt_set 1
+# to show the result of best HP on the test set:
+python runner.py $SYSTEM $MODEL $DATASET summarize --prompt_set aggregate --best --eval_test --official
+```
+
+The HP-tuning one is particularly useful if want to reproduce any of our experiments with your setup and/or model. Sample output:
+
+```txt
+****************************************
+Experiment Name: ircot_qa_codex_hotpotqa
+****************************************
+python run.py summarize ircot_qa_codex_hotpotqa --instantiation_scheme ircot_qa --prompt_set 1 --evaluation_path processed_data/hotpotqa/dev_subsampled.jsonl
+
+bm25_retrieval_count  distractor_count         metric_value
+0                     2              "1"  60.5 | 64.6 | 61.4 |   100
+1                     2              "2"  60.9 | 64.0 | 62.8 |   100
+2                     2              "3"  60.1 | 63.7 | 61.2 |   100
+3                     4              "1"  55.6 | 58.8 | 57.3 |   100
+4                     4              "2"  57.6 | 61.1 | 58.7 |   100
+5                     4              "3"  55.3 | 58.8 | 56.7 |   100
+6                     6              "1"  55.6 | 59.1 | 56.8 |   100
+7                     6              "2"  52.2 | 55.6 | 53.5 |   100
+8                     6              "3"  48.9 | 52.0 | 50.2 |   100
+9                     8              "1"  53.5 | 56.4 | 54.7 |   100
+10                    8              "2"  52.7 | 55.6 | 53.6 |   100
+...
+```
 
 # Running IRCoT (QA) using a Different Dataset or LLM
 
-Each experiment (system, model, data combination) in this project corresponds to an experiment config in `base_configs/...jsonnet`. Find the experiment closest to your usecase and change the model, dataset and related information in it as per your need.
+Each experiment (system, model, data combination) in this project corresponds to an experiment config in `base_configs/...jsonnet`. Find the experiment closest to your use case and change the model, dataset and related information in it as per your need.
 
 If you've changed the dataset, you'll need to ensure the Elasticsearch index of that name is available (see processing-notes and setting-up-retriever for it).
 
-If you've changed the model, you'll need to ensure model of that name is implemented and available in the code. If you want to try out a different OpenAI completion model, it'd just involve configuring the `engine` variable and setting the `model_tokens_limit` in [here](https://github.com/StonyBrookNLP/ircot/blob/main/commaqa/models/gpt3generator.py). Chat-based API isn't readily supported yet, but shouldn't be much work if you're interested. If you're interested in open LLMs, like Llama, MPT, etc, you can set up OpenAI-complaint FastChat server as shown [here](https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md), and made necessary changes in the base_config/ and you should be good to go.
+If you've changed the model, you'll need to ensure that the model of that name is implemented and available in the code. If you want to try out a different OpenAI completion model, it'd just involve configuring the `engine` variable and setting the `model_tokens_limit` in [here](https://github.com/StonyBrookNLP/ircot/blob/main/commaqa/models/gpt3generator.py). Chat-based API isn't readily supported yet, but shouldn't be much work if you're interested. If you're interested in open LLMs, like Llama, MPT, etc, you can set up OpenAI-complaint FastChat server as shown [here](https://github.com/lm-sys/FastChat/blob/main/docs/openai_api.md), and make necessary changes in the base_config/ and you should be good to go.
 
 If you're stuck anywhere in this process, open an issue with your specific choice of data/model, and I can help you to get there.
 
-# Acknowledgement
+**NOTE:** If you are trying to reproduce any of our experiments with your code and/or model, note that the choice of HP can make a huge difference in the result. See the sample output here, for example. In some experiments, the difference in scores between best and worst HP is over 20 pts. So do not skip the used HP tuning. If it is getting slow/expensive to try out all HPs, at least you might want to look at our HP exploration summary report above to guestimate what is likely to work the best.
+
+# Acknowledgment
 
 This code is heavily based on [CommaQA](https://github.com/allenai/CommaQA), which provides a way to build complex/multi-step systems involving agents. All modeling-related code for IRCoT project is in `commaqa/inference/ircot.py`, and all experiment configs (without HPs instantiated) for this project are in `base_configs/`.
 
