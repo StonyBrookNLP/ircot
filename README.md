@@ -223,7 +223,11 @@ If you do not want to run models but just see the predictions/outputs they gener
 ./download/predictions.sh
 ```
 
-This will not only download the final best-HP predictions on the test set but also all HP-tuning predictions on the dev set. They will be stored in `processed_data/{system_name}_{model_name}_{dataset_name}____{prompt_set_id}___{hp_descriptor}/`.
+This will not only download the final best-HP predictions on the test set but also all HP-tuning predictions on the dev set. They will be stored in
+
+```bash
+predictions/{system_name}_{model_name}_{dataset_name}____{prompt_set_id}___{hp_descriptor}/
+```.
 
 Once done, you can run any of the above given "summary" commands to show a report. Again, the 2 most useful of them are.
 
@@ -236,7 +240,7 @@ python runner.py $SYSTEM $MODEL $DATASET summarize --prompt_set aggregate --best
 
 The HP-tuning one is particularly useful if want to reproduce any of our experiments with your setup and/or model. Sample output:
 
-```txt
+```text
 ****************************************
 Experiment Name: ircot_qa_codex_hotpotqa
 ****************************************
