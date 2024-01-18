@@ -282,10 +282,22 @@ This code is heavily based on [CommaQA](https://github.com/allenai/CommaQA), whi
 If you find this work useful, consider citing it:
 
 ```bib
-@article{trivedi2022interleaving,
-  title={Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions},
-  author={Trivedi, Harsh and Balasubramanian, Niranjan and Khot, Tushar and Sabharwal, Ashish},
-  journal={arXiv preprint arXiv:2212.10509},
-  year={2022}
+@inproceedings{trivedi-etal-2023-interleaving,
+    title = "Interleaving Retrieval with Chain-of-Thought Reasoning for Knowledge-Intensive Multi-Step Questions",
+    author = "Trivedi, Harsh  and
+      Balasubramanian, Niranjan  and
+      Khot, Tushar  and
+      Sabharwal, Ashish",
+    editor = "Rogers, Anna  and
+      Boyd-Graber, Jordan  and
+      Okazaki, Naoaki",
+    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.acl-long.557",
+    doi = "10.18653/v1/2023.acl-long.557",
+    pages = "10014--10037",
 }
 ```
