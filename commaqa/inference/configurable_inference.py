@@ -77,7 +77,7 @@ def load_config(config_file):
         # HACKY: I've to ovvride this way instead of passing the env variables for now.
         if parsed_args.variable_replacements:
             import uuid
-            from hp_manager import instatiate_config
+            from run import instatiate_config
 
             variable_replacements = json.loads(parsed_args.variable_replacements)
             with open(config_file, "r") as file:
